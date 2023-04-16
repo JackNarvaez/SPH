@@ -13,7 +13,7 @@ dt = 0.04   # Timestep
 d  = 2      # dimensions
 k  = 0.1    # Pressure constant
 n  = 1      # Polytropic index
-nu = 1      # Viscocity coefficient
+nu = 1      # Viscosity coefficient
 
 # Star 1
 M1 = 4      # Star mass
@@ -50,3 +50,4 @@ pmin = minimum(rho)
 pmax = maximum(rho)
 
 animation(T, record, dt, pos, rho, "Density", pmin, pmax, 1.2(R1+R2), "2Star")
+#animation2(T, record, dt, pos, rho, "Density", pmin, pmax, 1.2(R1+R2), "2Star", N1)
