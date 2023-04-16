@@ -1,3 +1,5 @@
+using DelimitedFiles
+
 function Euler_Cromer(T, dt, pos, vel, a, N, k, n, lmbda, nu, m, h, Acceleration, Kernel, Gradient_Kernel, ioPos, ioRho)
     #=---------------------------------------------------------------
     Euler Cromer method to integrate the system over time.
