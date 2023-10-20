@@ -14,11 +14,11 @@ function Init_Dis(N, R, x0, y0, seed = 1234)
     Return:
     [x y]: Random positions of N particles.
     ---------------------------------------------------------------=#
-    Random.seed!(1234)
-    r = R*sqrt.(rand(Float64, N))
+    Random.seed!(seed)
+    r   = R*sqrt.(rand(Float64, N))
     theta = 2*pi*rand(Float64, N)
-    x = r.*cos.(theta) .+ x0
-    y = r.*sin.(theta) .+ y0
+    x   = r.*cos.(theta) .+ x0
+    y   = r.*sin.(theta) .+ y0
     return [x y]
 end;
 
@@ -33,9 +33,9 @@ function Gaussian_Kernel(x, y, h)
     Return:
     W:  Gaussian Kernel.
     ---------------------------------------------------------------=#
-    r2 = x^2 + y^2
-    H = h^2
-    W = 1.0/(H*pi)*exp(-r2/H)
+    r2  = x*x + y*y
+    H2  = 1.0/(h*h)
+    W   = H2/pi*exp(-r2*H2)
     return W
 end;
 
@@ -50,8 +50,9 @@ function Gradient_Gaussian_Kernel(x, y, h)
     Return:
     [Wx Wy]:  Gradient of the Gaussian kernel.
     ---------------------------------------------------------------=#
-    r2 = x^2 + y^2
-    n = -2/(h^4*pi)*exp(-r2/h^2)
+    r2  = x*x + y*y
+    H2  = 1.0/(h*h)
+    n   = -2.0*H2*H2/pi*exp(-r2*H2)
     return [n*x n*y]
 end;
 
@@ -124,7 +125,7 @@ function Coeff_static_grav_potential(k, n, M, R, d=2)
     return lmbda
 end;
 
-function Acceleration(pos, vel, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
+function Acceleration!(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
     #=---------------------------------------------------------------
     SPH approximation for the acceleration.
     -----------------------------------------------------------------
@@ -145,14 +146,19 @@ function Acceleration(pos, vel, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kerne
     a:       Acceleration
     ---------------------------------------------------------------=#
     
-    rho = ones(N)*Density(0, 0, m, h, Kernel)
-    P = zeros(N)
-    a = -lmbda.*pos .- nu.*vel
+    selfrho = Density(0, 0, m, h, Kernel)
+    for ii in 1:N
+        rho[ii] = selfrho
+        a[ii, 1]    = -lmbda*pos[ii, 1] - nu*vel[ii, 1]
+        a[ii, 2]    = -lmbda*pos[ii, 2] - nu*vel[ii, 2]
+    end
+    P   = zeros(N)
+    H2  = 1.0/(h*h)
     for i in 1:N
         dr = pos[i, :]' .- pos[i+1:end, :]
         for j = (i+1):N
             # Kernel's domain truncated to 2h.
-            if (dr[j-i, 1]^2 + dr[j-i, 2]^2)/h^2 <= 4
+            if (dr[j-i, 1]^2 + dr[j-i, 2]^2)*H2 <= 4.0
                 rho_ij = Density(dr[j-i, 1], dr[j-i, 2], m, h, Kernel)
                 rho[i] += rho_ij
                 rho[j] += rho_ij
@@ -165,12 +171,11 @@ function Acceleration(pos, vel, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kerne
     for i in 1:N
         dr = pos[i, :]' .- pos[i+1:end, :]
         for j in i+1:N
-            if (dr[j-i, 1]^2 + dr[j-i, 2]^2)/h^2 <= 4
-                acc_ij = (m*(P[i]/rho[i]^2 + P[j]/rho[j]^2)).*Gradient_Kernel(dr[j-i, 1], dr[j-i, 2], h)'
+            if (dr[j-i, 1]^2 + dr[j-i, 2]^2)*H2 <= 4.0
+                acc_ij = (m*(P[i]/(rho[i]*rho[i]) + P[j]/(rho[j]*rho[j]))).*Gradient_Kernel(dr[j-i, 1], dr[j-i, 2], h)'
                 a[i, :] -= acc_ij
                 a[j, :] += acc_ij
             end
         end
     end
-    return rho, P, a
 end;

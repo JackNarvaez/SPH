@@ -3,14 +3,14 @@ include("ToyStar.jl")
 include("Integrator.jl")
 include("AuxiliaryFunctions.jl")
 
-t0 = parse(Float64, ARGS[1])   # Initial time
-tEnd = parse(Float64, ARGS[2]) # Final time
-dt = parse(Float64, ARGS[3])   # Timestep
-N  = parse(UInt64, ARGS[4])   # Number of Particles
-M  = parse(Float64, ARGS[5])   # Star mass
-R  = parse(Float64, ARGS[6])   # Star radius
-k  = parse(Float64, ARGS[7])   # Pressure constant
-n  = parse(Float64, ARGS[8])   # Polytropic index
+t0  = parse(Float64, ARGS[1])   # Initial time
+tEnd= parse(Float64, ARGS[2])   # Final time
+dt  = parse(Float64, ARGS[3])   # Timestep
+N   = parse(UInt64, ARGS[4])    # Number of Particles
+M   = parse(Float64, ARGS[5])   # Star mass
+R   = parse(Float64, ARGS[6])   # Star radius
+k   = parse(Float64, ARGS[7])   # Pressure constant
+n   = parse(Float64, ARGS[8])   # Polytropic index
 record = 2
 
 h = 0.04/sqrt(N/1000) # Smoothing length

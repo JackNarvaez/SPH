@@ -34,10 +34,9 @@ T = Int((tEnd-t0)/dt) # Time Steps
 lmbda = Coeff_static_grav_potential(k, n, 2*M, R)
 
 rho = zeros(N) # Density
-P = zeros(N) # Pressure
 vel = zeros(N, 2) # Velocity
 pos = zeros(N, 2) # Position
-a = zeros(N, 2) # Acceleration
+acc = zeros(N, 2) # Acceleration
 
 pos[1:N1, :] = Init_Dis(N1, R1, -1, -1, seed)
 pos[N1+1:end, :] = Init_Dis(N2, R2, 1, 1, seed);
@@ -49,7 +48,7 @@ writedlm(ioPos, [pos[:, 1]])
 writedlm(ioPos, [pos[:, 2]])
 writedlm(ioRho, [rho])
 
-Leap_Frog(T, dt, Acceleration, pos, vel, a, N, k, n, lmbda, nu, m, h, Gaussian_Kernel, Gradient_Gaussian_Kernel, ioPos, ioRho)
+Leap_Frog(T, dt, pos, vel, rho, acc, N, k, n, lmbda, nu, m, h, Acceleration!, Gaussian_Kernel, Gradient_Gaussian_Kernel, ioPos, ioRho)
 
 close(ioPos)
 close(ioRho)
