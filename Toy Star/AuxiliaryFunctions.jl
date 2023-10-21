@@ -23,7 +23,7 @@ function animation(T, record, dt, ioPos, ioProp, Property, pmin, pmax, R, Name)
     gif(anim, Name*".mp4", fps = 10)
 end;
 
-function animation2(T, record, dt, ioPos, pmin, pmax, R, Name, N1)
+function animation2(T, record, dt, ioPos, R, Name, N1)
     #=---------------------------------------------------------------
     Generates a .mp4 video of the evolution of a 2 body system. It 
     shows in red and blue the particles of first and second body, 

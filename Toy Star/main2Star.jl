@@ -68,6 +68,6 @@ close(ioPos)
 close(ioRho)
 ioPos = open("./Files/StarPos.txt", "r");
 ioRho = open("./Files/StarRho.txt", "r");
-animation2(T, record, dt, ioPos, pmin, pmax, 2.5*R, "2StarColor", N1)
+animation2(T, record, dt, ioPos, 2.5*R, "2StarColor", N1)
 close(ioPos)
 close(ioRho)

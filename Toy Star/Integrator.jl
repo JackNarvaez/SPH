@@ -24,7 +24,7 @@ function Euler_Cromer(T, dt, pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Acceler
     ---------------------------------------------------------------=#
     for i in 1:T-1
         pos .+= dt.*vel
-        Acceleration!(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
+        Acceleration(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
         vel .+= dt.*a
         writedlm(ioPos, [pos[:, 1]])
         writedlm(ioPos, [pos[:, 2]])
@@ -56,7 +56,7 @@ function Verlet_Pos(T, dt, pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Accelerat
     ---------------------------------------------------------------=#
     for i in 1:T-1
         Temp_Pos = pos .+ 0.5*dt.*vel 
-        Acceleration!(Temp_Pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
+        Acceleration(Temp_Pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
         vel .+= dt.*a
         pos = Temp_Pos .+ 0.5*dt.*vel
         writedlm(ioPos, [pos[:, 1]])
@@ -88,14 +88,14 @@ function Leap_Frog(T, dt, pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Accelerati
     Gradient_Kernel: Gradient of the smoothing function
     io:     File to save data
     ---------------------------------------------------------------=#
-    Acceleration!(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
+    Acceleration(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
     Temp_Vel1 = vel
     for i in 1:T-1
         Temp_Vel2 = Temp_Vel1 .+ dt.*a
         pos .+= dt.*Temp_Vel2
         vel = 0.5.*(Temp_Vel1 .+ Temp_Vel2)
         Temp_Vel1 = Temp_Vel2
-        Acceleration!(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
+        Acceleration(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradient_Kernel)
         writedlm(ioPos, [pos[:, 1]])
         writedlm(ioPos, [pos[:, 2]])
         writedlm(ioRho, [rho])

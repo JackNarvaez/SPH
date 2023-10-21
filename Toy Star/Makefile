@@ -11,7 +11,7 @@ R  = 0.75   # Star radius
 k  = 0.1    # Pressure constant
 n  = 1      # Polytropic index
 nu = 1      # Viscosity coefficient
-N  = 100   # Number of Particles
+N  = 500   # Number of Particles
 
 #----- Simulation parameters for 2 Stars -----#
 #Star 1
