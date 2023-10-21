@@ -55,10 +55,14 @@ close(ioRho)
 
 record = 2
 pmin = 0
-pmax = 15
 
 ioPos = open("./Files/StarPos.txt", "r");
 ioRho = open("./Files/StarRho.txt", "r");
+
+pmax = ceil(Maxprop(ioRho))
+
+ioRho = open("./Files/StarRho.txt", "r");
+
 animation(T, record, dt, ioPos, ioRho, "Density", pmin, pmax, 2.5*R, "2Star")
 close(ioPos)
 close(ioRho)

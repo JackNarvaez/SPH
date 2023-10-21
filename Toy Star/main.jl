@@ -36,7 +36,7 @@ writedlm(ioPos, [pos[:, 1]])
 writedlm(ioPos, [pos[:, 2]])
 writedlm(ioRho, [rho])
 
-@time Leap_Frog(T, dt, pos, vel, rho, acc, N, k, n, lmbda, nu, m, h, Acceleration!, Gaussian_Kernel, Gradient_Gaussian_Kernel, ioPos, ioRho)
+Leap_Frog(T, dt, pos, vel, rho, acc, N, k, n, lmbda, nu, m, h, Acceleration!, Gaussian_Kernel, Gradient_Gaussian_Kernel, ioPos, ioRho)
 
 close(ioPos)
 close(ioRho)
