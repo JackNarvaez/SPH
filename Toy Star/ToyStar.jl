@@ -149,8 +149,9 @@ function Acceleration!(pos, vel, rho, a, N, k, n, lmbda, nu, m, h, Kernel, Gradi
     selfrho = Density(0, 0, m, h, Kernel)
     for ii in 1:N
         rho[ii] = selfrho
-        a[ii, 1]    = -lmbda*pos[ii, 1] - nu*vel[ii, 1]
-        a[ii, 2]    = -lmbda*pos[ii, 2] - nu*vel[ii, 2]
+        CoM = sum(pos, dims=1)/N
+        a[ii, 1]    = -lmbda*(pos[ii, 1] - CoM[1]) - nu*vel[ii, 1]
+        a[ii, 2]    = -lmbda*(pos[ii, 2] - CoM[2]) - nu*vel[ii, 2]
     end
     P   = zeros(N)
     H2  = 1.0/(h*h)
