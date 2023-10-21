@@ -67,3 +67,17 @@ function ConvertStringtoFloat(String, N)
     end
     return Array
 end;
+
+function Maxprop(ioProp)
+    #=---------------------------------------------------------------
+    Calculate the maximum value in a data file.
+    ---------------------------------------------------------------=#
+    pmax = 1.0
+    for ii in 1:record:T
+        p = maximum(ConvertStringtoFloat(split(readline(ioProp), "\t"), N))
+        if p > pmax
+            pmax = p
+        end
+    end
+    return pmax
+end;
